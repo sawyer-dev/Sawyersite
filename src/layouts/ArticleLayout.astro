@@ -1,0 +1,239 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs, { type Crumb } from '../components/navigation/Breadcrumbs.astro';
+import PrevNext from '../components/navigation/PrevNext.astro';
+import TableOfContents from '../components/navigation/TableOfContents.astro';
+import StatusBadge from '../components/ui/StatusBadge.astro';
+
+interface Target {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  title: string;
+  summary: string;
+  crumbs: Crumb[];
+  /** `article` = readable column (+ contents), `wide` = full-width body, `custom` = author controls layout. */
+  layout?: 'article' | 'wide' | 'custom';
+  status?: string;
+  meta?: string[];
+  tags?: string[];
+  links?: { label: string; url: string }[];
+  headings?: { depth: number; slug: string; text: string }[];
+  previous?: Target | undefined;
+  next?: Target | undefined;
+  previousLabel?: string;
+  nextLabel?: string;
+  allHref: string;
+  allLabel: string;
+}
+
+const {
+  title,
+  summary,
+  crumbs,
+  layout = 'article',
+  status,
+  meta = [],
+  tags = [],
+  links = [],
+  headings = [],
+  previous,
+  next,
+  previousLabel,
+  nextLabel,
+  allHref,
+  allLabel,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={summary} type="article">
+  <div class="container article-wrap">
+    <Breadcrumbs items={crumbs} />
+
+    <header class="article-head">
+      <p class="article-head__meta">
+        {status && <StatusBadge status={status} />}
+        {meta.map((m) => (
+          <span>{m}</span>
+        ))}
+      </p>
+      <h1>{title}</h1>
+      <p class="article-head__summary">{summary}</p>
+      {tags.length > 0 && (
+        <ul class="tag-list" aria-label="Technologies and topics">
+          {tags.map((t) => (
+            <li class="tag">{t}</li>
+          ))}
+        </ul>
+      )}
+      {links.length > 0 && (
+        <ul class="article-head__links btn-row">
+          {links.map((l) => (
+            <li>
+              <a class="btn btn--ghost" href={l.url} target="_blank" rel="noopener noreferrer">
+                {l.label}
+                <span class="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </header>
+
+    <div class:list={['article-body', `article-body--${layout}`]}>
+      {layout === 'article' && (
+        <aside class="article-toc">
+          <TableOfContents headings={headings} />
+        </aside>
+      )}
+      <div
+        class:list={[
+          'article-content',
+          layout !== 'custom' && 'prose',
+          layout === 'wide' && 'prose--wide',
+        ]}
+        data-article
+      >
+        <slot />
+      </div>
+    </div>
+
+    <PrevNext
+      previous={previous}
+      next={next}
+      previousLabel={previousLabel}
+      nextLabel={nextLabel}
+      allHref={allHref}
+      allLabel={allLabel}
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .article-wrap {
+    padding-block: var(--space-4) var(--space-8);
+  }
+
+  .article-head {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 52rem;
+    padding-block: var(--space-6) var(--space-7);
+  }
+
+  .article-head__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .article-head__summary {
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+  }
+
+  .article-head__links {
+    list-style: none;
+  }
+
+  .article-body {
+    padding-top: var(--space-6);
+    border-top: 3px solid var(--mark);
+  }
+
+  .article-toc:empty {
+    display: none;
+  }
+
+  @media (min-width: 64rem) {
+    .article-body--article {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 15rem;
+      grid-template-areas: 'content toc';
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    .article-body--article .article-content {
+      grid-area: content;
+    }
+
+    .article-body--article .article-toc {
+      grid-area: toc;
+    }
+  }
+
+  :global(.prose.prose--wide) {
+    max-width: none;
+  }
+</style>
+
+<script>
+  // Adds a copy button to every code block in article content.
+  document.querySelectorAll<HTMLPreElement>('[data-article] pre').forEach((pre) => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'copy-btn';
+    button.textContent = 'Copy';
+    button.setAttribute('aria-label', 'Copy code to clipboard');
+    const status = document.createElement('span');
+    status.className = 'visually-hidden';
+    status.setAttribute('role', 'status');
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(code.textContent ?? '');
+        button.textContent = 'Copied';
+        status.textContent = 'Code copied to clipboard';
+      } catch {
+        button.textContent = 'Copy failed';
+        status.textContent = 'Could not copy. Select the code and copy manually.';
+      }
+      setTimeout(() => {
+        button.textContent = 'Copy';
+        status.textContent = '';
+      }, 2000);
+    });
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block';
+    pre.replaceWith(wrapper);
+    wrapper.append(pre, button, status);
+  });
+</script>
+
+<style is:global>
+  .code-block {
+    position: relative;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    min-height: 2rem;
+    padding: 0 0.75rem;
+    border: 1px solid #6a8580;
+    border-radius: 4px;
+    background: #0d1e1e;
+    color: #e6efe9;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .copy-btn:hover {
+    border-color: #4cc066;
+  }
+
+  .copy-btn:focus-visible {
+    outline: 3px solid #4cc066;
+    outline-offset: 2px;
+  }
+</style>

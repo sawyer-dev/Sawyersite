@@ -1,0 +1,62 @@
+---
+import EntryCard from '../../components/content/EntryCard.astro';
+import PageIntro from '../../components/content/PageIntro.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getHobbies } from '../../lib/collections';
+import { url } from '../../lib/urls';
+
+const hobbies = await getHobbies();
+---
+
+<BaseLayout
+  title="Hobbies"
+  description="Interests outside of work from Sawyer Knowles, documented alongside the engineering projects."
+>
+  <PageIntro
+    eyebrow="Hobbies"
+    title="Outside of work"
+    lead="Current interests first, then past ones."
+  />
+
+  <section class="section" aria-label="Hobby list">
+    <div class="container">
+      {hobbies.length === 0 ? (
+        <EmptyState
+          title="Nothing here yet"
+          message="Hobby write-ups haven't been added yet. In the meantime, the projects page has plenty to look at."
+          actionLabel="See projects"
+          actionHref={url('projects/')}
+        />
+      ) : (
+        <ul class="grid">
+          {hobbies.map((h) => (
+            <li>
+              <EntryCard
+                href={url(`hobbies/${h.id}/`)}
+                title={h.data.title}
+                summary={h.data.summary}
+                status={h.data.status}
+                meta={h.data.started ? [`Since ${h.data.started}`] : []}
+                tags={h.data.categories}
+                image={h.data.thumbnail}
+                imageAlt={h.data.thumbnailAlt}
+                headingLevel="h2"
+                cta="Read more"
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    list-style: none;
+  }
+</style>

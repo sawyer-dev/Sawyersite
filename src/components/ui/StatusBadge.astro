@@ -1,0 +1,48 @@
+---
+import { getStatus } from '../../lib/status';
+
+interface Props {
+  status: string;
+}
+
+const info = getStatus(Astro.props.status);
+---
+
+<span class={`status status--${info.tone}`}>
+  <span class="status__shape" aria-hidden="true"></span>
+  {info.label}
+</span>
+
+<style>
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* Shape differs per state so status never relies on colour alone. */
+  .status__shape {
+    width: 0.6rem;
+    height: 0.6rem;
+    border: 1.5px solid var(--mark);
+    flex: none;
+  }
+
+  .status--done .status__shape {
+    background: var(--mark);
+  }
+
+  .status--active .status__shape {
+    background: linear-gradient(90deg, var(--mark) 50%, transparent 50%);
+  }
+
+  .status--muted .status__shape {
+    border-color: var(--border-strong);
+  }
+</style>

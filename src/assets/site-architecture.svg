@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" role="img" aria-labelledby="t d">
+  <title id="t">Site architecture</title>
+  <desc id="d">Markdown and MDX content is validated by collection schemas, rendered to static pages and deployed to GitHub Pages. Interactive apps are loaded on demand through an app registry.</desc>
+  <style>
+    text { font-family: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif; fill: #fcfffc; }
+    .label { font-size: 20px; font-weight: 600; }
+    .sub { font-size: 14px; fill: #a9bcb7; }
+    .tag { font-size: 12px; letter-spacing: 1.5px; fill: #4cc066; font-family: ui-monospace, Consolas, monospace; }
+    .box { fill: #0d1e1e; stroke: #6a8580; stroke-width: 1.5; }
+    .hot { fill: #2d3a3a; stroke: #2ba84a; stroke-width: 2; }
+    .arrow { stroke: #2ba84a; stroke-width: 2; fill: none; }
+    .dash { stroke-dasharray: 6 6; }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#2ba84a"/>
+    </marker>
+  </defs>
+  <rect width="960" height="400" fill="#040f0f"/>
+
+  <text class="tag" x="40" y="44">BUILD TIME</text>
+  <rect class="box" x="40" y="60" width="220" height="90"/>
+  <text class="label" x="60" y="95">Content</text>
+  <text class="sub" x="60" y="123">Markdown / MDX + media</text>
+
+  <rect class="hot" x="370" y="60" width="220" height="90"/>
+  <text class="label" x="390" y="95">Collection schemas</text>
+  <text class="sub" x="390" y="123">Validated metadata</text>
+
+  <rect class="box" x="700" y="60" width="220" height="90"/>
+  <text class="label" x="720" y="95">Static HTML</text>
+  <text class="sub" x="720" y="123">One real page per route</text>
+
+  <path class="arrow" d="M260 105H366" marker-end="url(#a)"/>
+  <path class="arrow" d="M590 105H696" marker-end="url(#a)"/>
+  <path class="arrow" d="M810 150V230" marker-end="url(#a)"/>
+
+  <text class="tag" x="40" y="214">RUN TIME</text>
+  <rect class="box" x="40" y="230" width="220" height="90"/>
+  <text class="label" x="60" y="265">Apps page</text>
+  <text class="sub" x="60" y="293">Static shell, no app code</text>
+
+  <rect class="hot" x="370" y="230" width="220" height="90"/>
+  <text class="label" x="390" y="265">App registry</text>
+  <text class="sub" x="390" y="293">Dynamic import per app</text>
+
+  <rect class="box" x="700" y="230" width="220" height="90"/>
+  <text class="label" x="720" y="265">GitHub Pages</text>
+  <text class="sub" x="720" y="293">Served from /dist</text>
+
+  <path class="arrow dash" d="M260 275H366" marker-end="url(#a)"/>
+  <path class="arrow dash" d="M590 275H696" marker-start="url(#a)" marker-end="url(#a)"/>
+  <text class="sub" x="40" y="360">Dashed: loaded only when an app page is opened.</text>
+</svg>

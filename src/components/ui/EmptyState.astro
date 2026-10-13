@@ -1,0 +1,43 @@
+---
+interface Props {
+  title: string;
+  message?: string;
+  actionLabel?: string;
+  actionHref?: string;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { title, message, actionLabel, actionHref, headingLevel = 'h2' } = Astro.props;
+const Heading = headingLevel;
+---
+
+<div class="empty">
+  <Heading class="empty__title">{title}</Heading>
+  {message && <p class="empty__message">{message}</p>}
+  <slot />
+  {actionLabel && actionHref && (
+    <a class="btn btn--ghost" href={actionHref}>
+      {actionLabel}
+    </a>
+  )}
+</div>
+
+<style>
+  .empty {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+    max-width: 44rem;
+    padding: var(--space-6);
+    border: 1.5px dashed var(--border-strong);
+    border-radius: var(--radius);
+  }
+
+  .empty__title {
+    font-size: var(--text-xl);
+  }
+
+  .empty__message {
+    color: var(--text-muted);
+  }
+</style>

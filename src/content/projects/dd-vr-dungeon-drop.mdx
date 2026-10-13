@@ -1,0 +1,47 @@
+---
+title: D&D VR Dungeon Drop
+summary: An immersive VR gallery of four animated, interactable encounters with iconic Dungeons & Dragons monsters, made as a final project for an immersive virtual environments course.
+year: 2021
+status: complete
+order: 2
+role: Course final project
+categories: [Games, XR]
+technologies: [VR, Oculus]
+thumbnail: ../../assets/projects/dd-vr-dungeon-drop/encounter-1-dragon.webp
+thumbnailAlt: A dragon roaring in a dim dungeon in D&D VR Dungeon Drop.
+links:
+  - label: Source on GitHub
+    url: https://github.com/SawyerKnowles/DungeonDrop
+contentLayout: article
+---
+
+import dragon from '../../assets/projects/dd-vr-dungeon-drop/encounter-1-dragon.webp';
+import skeleton from '../../assets/projects/dd-vr-dungeon-drop/encounter-2-skeleton.webp';
+import mimic from '../../assets/projects/dd-vr-dungeon-drop/encounter-3-mimic.webp';
+import beholder from '../../assets/projects/dd-vr-dungeon-drop/encounter-4-beholder.webp';
+
+## Overview
+
+D&D VR Dungeon Drop (Dungeon Drop for short) is an immersive gallery of virtual fantasy encounters. Each one is a fully 3D, animated, interactable scene, and together they feature four iconic monsters from Dungeons & Dragons.
+
+It was my final project for CS5641, Immersive Virtual Environments, in spring 2021.
+
+## How it plays
+
+While wearing an Oculus headset, you face the first encounter. Every encounter has a grabbable sword you can interact with, though it does nothing more than that. The monster in each scene loops through animations to bring it to life. You can press the A button on the right controller to change the scene every 3 seconds.
+
+## Demo
+
+<VideoFrame youtubeId="ClI-n8E4zUY" title="Dungeon Drop Demo" />
+
+## The four encounters
+
+<Gallery
+  label="Dungeon Drop encounters"
+  images={[
+    { src: dragon, alt: 'A dragon roaring in the first encounter.', caption: 'Encounter 1: the dragon roars before it starts flying.' },
+    { src: skeleton, alt: 'The player attacking a skeleton while holding two swords.', caption: 'Encounter 2: the sword from the first encounter comes along, and the player dual wields it with the second sword while attacking the skeleton.' },
+    { src: mimic, alt: 'A mimic lunging at the player, who is dropping both swords.', caption: 'Encounter 3: the mimic tries to frighten the player, and succeeds as both swords are dropped.' },
+    { src: beholder, alt: 'A beholder hovering in front of the player, who holds two swords in a defensive stance.', caption: 'Encounter 4: the beholder recovers from being dizzy as the player takes a defensive stance, dual wielding swords from earlier encounters.' },
+  ]}
+/>

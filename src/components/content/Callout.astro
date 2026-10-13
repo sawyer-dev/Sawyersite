@@ -1,0 +1,50 @@
+---
+interface Props {
+  title?: string;
+  tone?: 'note' | 'warning' | 'placeholder';
+}
+
+const { title, tone = 'note' } = Astro.props;
+const label = { note: 'Note', warning: 'Heads up', placeholder: 'To be supplied' }[tone];
+---
+
+<aside class={`callout callout--${tone}`} aria-label={title ?? label}>
+  <p class="callout__label">{title ?? label}</p>
+  <div class="callout__body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .callout {
+    margin-block: var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--mark);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .callout--warning {
+    border-left-color: var(--text);
+  }
+
+  .callout--placeholder {
+    border-style: dashed;
+    border-left-style: solid;
+    border-left-color: var(--border-strong);
+  }
+
+  .callout__label {
+    margin-bottom: var(--space-1);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .callout__body > :global(* + *) {
+    margin-top: var(--space-3);
+  }
+</style>

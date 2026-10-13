@@ -1,0 +1,71 @@
+---
+title: This website
+summary: A static, content-driven portfolio and playground built with Astro and TypeScript, with typed content collections and apps that load on demand.
+year: 2026
+status: in-progress
+featured: false
+order: 1
+role: Design and engineering
+categories: [Web, Tooling]
+technologies: [Astro, TypeScript, React, MDX, Vitest, Playwright, GitHub Actions]
+links:
+  - label: Source on GitHub
+    url: https://github.com/sawyer-dev/Sawyersite
+contentLayout: article
+---
+
+import siteArchitecture from '../../assets/site-architecture.svg';
+
+## Overview
+
+This site is both my portfolio and a place to publish small interactive experiments. It is built as static HTML, so pages are fast and hosting is simple, while individual apps can still ship real client-side interactivity.
+
+## Goals
+
+- Make professional information easy to scan for someone with thirty seconds.
+- Let projects, hobbies, and apps each use a different page layout without redesigning the shell.
+- Keep adding content cheap: a new entry should be one file plus any media.
+- Keep experiments isolated so one broken demo cannot break the rest of the site.
+
+## How it fits together
+
+Content lives in Markdown or MDX files with validated frontmatter. Index pages, previous/next links, and the home page are derived from that content, so nothing is listed by hand.
+
+<MediaFrame
+  src={siteArchitecture}
+  alt="Diagram showing content validated by schemas and rendered to static HTML, with apps loaded on demand through a registry."
+  caption="Build-time content pipeline (top) and run-time app loading (bottom)."
+/>
+
+## Design decisions
+
+### Static first
+
+Every route is a real HTML file, so direct links and refreshes work on GitHub Pages without client-side routing. JavaScript is limited to the theme toggle, the mobile menu, and the apps themselves.
+
+### Typed content
+
+Each collection has a schema that fails the build on invalid metadata, such as a missing thumbnail description or an unknown app key. The same schema documents what a new entry needs.
+
+### Apps as modules
+
+An app is a folder plus one line in a registry. The registry uses dynamic imports, so an app's code and styles are only downloaded when its page is opened, and a wrapper catches load and render failures.
+
+```ts
+export const appRegistry = {
+  'rule-explorer': () => import('./rule-explorer/RuleExplorer'),
+} satisfies Record<string, () => Promise<AppModule>>;
+```
+
+<Callout title="Theme handling">
+  A small inline script sets the saved or system theme before first paint, which avoids a flash of
+  the wrong colours. If storage is unavailable it falls back to the system preference.
+</Callout>
+
+## Quality checks
+
+The project runs formatting, linting, type checking, unit tests, a production build, and a link and metadata validation script. A separate browser script runs automated accessibility checks with axe-core against built pages.
+
+## What is next
+
+New projects and apps get added as content files. The current work in progress is filling in write-ups and media for existing projects.

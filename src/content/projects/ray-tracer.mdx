@@ -1,0 +1,34 @@
+---
+title: Ray Tracer
+summary: A ray tracer written in C that renders 3D shapes with shading, reflections, and shadows, built for a computer graphics course.
+year: 2020
+status: complete
+order: 0
+role: Course project
+categories: [Graphics]
+technologies: [C]
+thumbnail: ../../assets/projects/ray-tracer/reflections-shadows.webp
+thumbnailAlt: Reflective spheres casting shadows in front of a blue wall.
+contentLayout: article
+---
+
+import flat from '../../assets/projects/ray-tracer/flat-shapes.webp';
+import shaded from '../../assets/projects/ray-tracer/shaded-shapes.webp';
+import multiple from '../../assets/projects/ray-tracer/multiple-shapes.webp';
+import reflections from '../../assets/projects/ray-tracer/reflections-shadows.webp';
+
+## Overview
+
+This ray tracer was developed for my Graphics class in the fall 2020 semester. It is written in C and uses precise mathematical formulas to shoot rays into a scene, detect the shapes they hit, and draw each shape according to its location, color, and position relative to the light source. It can also render reflective surfaces and shadows.
+
+## Development progress
+
+<Gallery
+  label="Ray tracer development progress"
+  images={[
+    { src: flat, alt: 'A single flat-colored circle with no shading.', caption: 'Rendering a 3D shape without any indication of depth.' },
+    { src: shaded, alt: 'A green sphere with shading that gives it depth.', caption: 'Rendering a 3D shape with an indication of depth.' },
+    { src: multiple, alt: 'Three spheres in front of a blue wall.', caption: 'Rendering multiple 3D shapes at once.' },
+    { src: reflections, alt: 'Reflective spheres casting shadows in front of a blue wall.', caption: 'Rendering reflections and shadows.' },
+  ]}
+/>

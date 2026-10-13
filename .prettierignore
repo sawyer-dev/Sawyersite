@@ -1,0 +1,7 @@
+dist/
+.astro/
+node_modules/
+package-lock.json
+personal-website-developer-spec.md
+Sawyer_Knowles_Resume_2026.md
+src/content/**/*.mdx

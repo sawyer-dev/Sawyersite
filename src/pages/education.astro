@@ -1,0 +1,61 @@
+---
+import PageIntro from '../components/content/PageIntro.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { education } from '../data/profile';
+import { url } from '../lib/urls';
+---
+
+<BaseLayout
+  title="Education"
+  description="Sawyer Knowles holds a B.S. in Computer Science from Michigan Technological University (2018–2022)."
+>
+  <PageIntro eyebrow="Education" title="Education" />
+
+  <section class="section" aria-label="Degrees">
+    <div class="container container--narrow">
+      {education.map((e) => (
+        <article class="edu">
+          <p class="edu__dates">{e.dates}</p>
+          <h2>{e.institution}</h2>
+          <p class="edu__degree">
+            {e.degree}, {e.field}
+          </p>
+          {e.gpa && <p class="edu__gpa">GPA {e.gpa}</p>}
+        </article>
+      ))}
+      <p class="edu__more">
+        For hands-on work, see <a href={url('projects/')}>projects</a> and
+        <a href={url('experience/')}>experience</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .edu {
+    display: grid;
+    gap: var(--space-2);
+    padding-left: var(--space-5);
+    border-left: 3px solid var(--mark);
+  }
+
+  .edu__dates {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  .edu__degree {
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+
+  .edu__gpa {
+    color: var(--text-muted);
+  }
+
+  .edu__more {
+    margin-top: var(--space-6);
+    color: var(--text-muted);
+  }
+</style>

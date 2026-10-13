@@ -1,0 +1,184 @@
+.rule-explorer {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.re-controls {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  align-items: start;
+}
+
+.re-field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.re-field label,
+.rule-explorer legend {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.re-field input {
+  min-height: 2.75rem;
+  padding: 0 var(--space-3);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+}
+
+.re-field input:hover {
+  border-color: var(--accent);
+}
+
+.re-field input[aria-invalid='true'] {
+  border-color: var(--text);
+  border-width: 2px;
+  border-style: dashed;
+}
+
+.re-help {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.re-error {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.rule-explorer fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rule-explorer legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+}
+
+.re-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.re-btn-row .btn[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.re-btn-row .btn[aria-pressed='true']::before {
+  content: '✓';
+}
+
+.re-preset-note {
+  font-weight: 400;
+  font-size: var(--text-xs);
+}
+
+.re-table ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4.25rem, 1fr));
+  gap: var(--space-2);
+  list-style: none;
+  max-width: 44rem;
+}
+
+.re-pattern {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  width: 100%;
+  min-height: 5.5rem;
+  padding: var(--space-2);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color var(--duration) var(--ease);
+}
+
+.re-pattern:hover {
+  border-color: var(--accent);
+}
+
+.re-pattern[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--surface-raised);
+}
+
+.re-pattern__in {
+  display: flex;
+  gap: 2px;
+}
+
+.re-pattern__arrow {
+  line-height: 1;
+  color: var(--text-muted);
+}
+
+.cell {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 1.5px solid var(--border-strong);
+  background: transparent;
+}
+
+.cell--on {
+  border-color: var(--text);
+  background: var(--text);
+}
+
+.re-output {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.re-output__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.re-title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 650;
+}
+
+.re-stale {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.re-canvas {
+  width: 100%;
+  max-width: 60rem;
+  height: auto;
+  aspect-ratio: 81 / 48;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+
+.re-canvas__bg {
+  fill: var(--code-bg);
+}
+
+.re-canvas__cells {
+  fill: #4cc066;
+}

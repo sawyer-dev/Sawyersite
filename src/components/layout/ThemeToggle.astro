@@ -1,0 +1,125 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={['theme-toggle', className]}
+  data-theme-toggle
+  aria-label="Switch to dark theme"
+>
+  <svg
+    class="icon icon--moon"
+    viewBox="0 0 24 24"
+    width="20"
+    height="20"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a.6.6 0 0 0-.8-.7A9.5 9.5 0 1 0 21.2 15a.6.6 0 0 0-.7-.8Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linejoin="round"
+    ></path>
+  </svg>
+  <svg
+    class="icon icon--sun"
+    viewBox="0 0 24 24"
+    width="20"
+    height="20"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+    <path
+      d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+    ></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text);
+    transition:
+      border-color var(--duration) var(--ease),
+      color var(--duration) var(--ease);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--link);
+  }
+
+  :global(html:not(.js)) .theme-toggle {
+    display: none;
+  }
+
+  .icon--sun {
+    display: none;
+  }
+
+  :global(html[data-theme='dark']) .icon--sun {
+    display: block;
+  }
+
+  :global(html[data-theme='dark']) .icon--moon {
+    display: none;
+  }
+</style>
+
+<script>
+  const toggles = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+  const root = document.documentElement;
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function hasStoredChoice(): boolean {
+    try {
+      const stored = localStorage.getItem('theme');
+      return stored === 'light' || stored === 'dark';
+    } catch {
+      return false;
+    }
+  }
+
+  function apply(theme: 'light' | 'dark') {
+    root.setAttribute('data-theme', theme);
+    const label = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
+    toggles.forEach((button) => button.setAttribute('aria-label', label));
+  }
+
+  apply(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+
+  toggles.forEach((button) =>
+    button.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      apply(next);
+      try {
+        localStorage.setItem('theme', next);
+      } catch {
+        // Storage unavailable: the choice applies to this page view only.
+      }
+    }),
+  );
+
+  // Without a saved choice, keep following the operating-system preference.
+  media.addEventListener('change', (event) => {
+    if (!hasStoredChoice()) apply(event.matches ? 'dark' : 'light');
+  });
+</script>

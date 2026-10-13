@@ -1,0 +1,24 @@
+---
+title: Game Performance Optimization
+summary: A study of rendering and loading performance in Unity. Static batching, GPU instancing, and occlusion culling improved a sample FPS project by 20% overall.
+year: 2023
+status: complete
+order: 1
+categories: [Games, Performance]
+technologies: [Unity, Static batching, GPU instancing, Occlusion culling, Additive scene loading]
+contentLayout: article
+---
+
+## Overview
+
+This study let me dig into rendering and loading performance optimization, along with performance profiling, using Unity.
+
+## What I tried
+
+- **Static batching, GPU instancing, and occlusion culling** reduce the rendering work done each frame.
+- **Asynchronous additive scene loading** moves level loading off the critical path of gameplay.
+
+## Results
+
+- Combining static batching, GPU instancing, and occlusion culling improved the performance of a sample FPS project by 20% overall.
+- Asynchronous additive scene loading eliminated the performance spikes that happened when loading into new levels.

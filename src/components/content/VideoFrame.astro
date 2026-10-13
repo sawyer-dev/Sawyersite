@@ -1,0 +1,185 @@
+---
+/* eslint-disable astro/jsx-a11y/media-has-caption -- captions are optional and supplied via captionsSrc */
+import { url } from '../../lib/urls';
+
+interface Props {
+  title: string;
+  /** Path inside public/, e.g. "media/demo.mp4". The site base path is added automatically. */
+  src?: string;
+  poster?: string;
+  /** YouTube video ID. Nothing is requested from YouTube until the visitor presses play. */
+  youtubeId?: string;
+  /** Embed page URL for other hosted video. Loaded lazily; review its privacy impact first. */
+  embedUrl?: string;
+  /** Separate transcript or captions link, if available. */
+  transcriptHref?: string;
+  /** WebVTT captions file for locally hosted video. */
+  captionsSrc?: string;
+  caption?: string;
+  /** CSS aspect ratio, e.g. "16 / 9". */
+  ratio?: string;
+}
+
+const {
+  title,
+  src,
+  poster,
+  youtubeId,
+  embedUrl,
+  transcriptHref,
+  captionsSrc,
+  caption,
+  ratio = '16 / 9',
+} = Astro.props;
+
+if (youtubeId && !/^[\w-]{11}$/.test(youtubeId)) {
+  throw new Error(`VideoFrame: "${youtubeId}" is not a valid YouTube video ID.`);
+}
+const watchUrl = youtubeId ? `https://www.youtube.com/watch?v=${youtubeId}` : undefined;
+---
+
+<figure class="video">
+  <div class="video__frame" style={`aspect-ratio: ${ratio}`}>
+    {youtubeId ? (
+      <video-facade data-id={youtubeId} data-title={title}>
+        <button type="button" class="video__play">
+          <span class="video__play-icon" aria-hidden="true"></span>
+          <span class="video__play-title">
+            Play video<span class="visually-hidden">: {title}</span>
+          </span>
+          <span class="video__play-note">Loads from YouTube when you press play</span>
+        </button>
+      </video-facade>
+    ) : embedUrl ? (
+      <iframe
+        src={embedUrl}
+        title={title}
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        sandbox="allow-scripts allow-same-origin allow-presentation"
+        allowfullscreen
+      />
+    ) : (
+      <video controls preload="none" poster={poster && url(poster)} playsinline aria-label={title}>
+        {src && <source src={url(src)} />}
+        {captionsSrc && (
+          <track kind="captions" src={url(captionsSrc)} srclang="en" label="English" />
+        )}
+        <p>Your browser cannot play this video.</p>
+      </video>
+    )}
+  </div>
+  {(caption || transcriptHref || watchUrl) && (
+    <figcaption>
+      {caption ?? (watchUrl ? title : undefined)}
+      {watchUrl && (
+        <>
+          {' '}
+          <a href={watchUrl} target="_blank" rel="noopener noreferrer">
+            Watch on YouTube<span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        </>
+      )}
+      {transcriptHref && (
+        <>
+          {' '}
+          <a href={transcriptHref}>Transcript</a>
+        </>
+      )}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .video {
+    margin: var(--space-5) 0;
+  }
+
+  .video__frame {
+    width: 100%;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .video__frame :global(video),
+  .video__frame :global(iframe),
+  .video__frame :global(video-facade) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .video__play {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    height: 100%;
+    padding: var(--space-4);
+    border: 0;
+    background: transparent;
+    color: #e6efe9;
+    text-align: center;
+  }
+
+  .video__play:hover .video__play-icon {
+    background: #4cc066;
+  }
+
+  .video__play:focus-visible {
+    outline: 3px solid #4cc066;
+    outline-offset: -6px;
+  }
+
+  .video__play-icon {
+    display: block;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: var(--color-green);
+    clip-path: polygon(22% 12%, 22% 88%, 88% 50%);
+    transition: background-color var(--duration) var(--ease);
+  }
+
+  .video__play-title {
+    font-weight: 650;
+  }
+
+  .video__play-note {
+    font-size: var(--text-xs);
+    color: #a9bcb7;
+  }
+
+  figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+</style>
+
+<script>
+  // Swaps the play button for a privacy-enhanced YouTube embed on demand.
+  class VideoFacade extends HTMLElement {
+    connectedCallback() {
+      this.querySelector('button')?.addEventListener(
+        'click',
+        () => {
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://www.youtube-nocookie.com/embed/${this.dataset.id}?autoplay=1&rel=0`;
+          iframe.title = this.dataset.title ?? 'Video';
+          iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+          iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+          iframe.allowFullscreen = true;
+          this.replaceChildren(iframe);
+          iframe.focus();
+        },
+        { once: true },
+      );
+    }
+  }
+
+  if (!customElements.get('video-facade')) customElements.define('video-facade', VideoFacade);
+</script>

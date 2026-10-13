@@ -1,0 +1,121 @@
+/* Design tokens. Palette colours are defined once; everything else uses the semantic variables. */
+
+:root {
+  /* Supplied palette */
+  --color-ink: #040f0f;
+  --color-forest: #248232;
+  --color-green: #2ba84a;
+  --color-slate: #2d3a3a;
+  --color-paper: #fcfffc;
+
+  /* Typography */
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', var(--font-sans);
+  --font-mono:
+    ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --text-2xl: clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);
+  --text-3xl: clamp(2.125rem, 1.5rem + 3vw, 3.75rem);
+  --text-hero: clamp(2.25rem, 1.5rem + 3.6vw, 4rem);
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 6rem;
+  --section-gap: clamp(3rem, 2rem + 4vw, 5.5rem);
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2rem);
+
+  /* Shape and layout */
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --container: 74rem;
+  --container-narrow: 48rem;
+  --measure: 68ch;
+  --header-height: 4rem;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --duration: 160ms;
+
+  color-scheme: light;
+}
+
+/* Light theme (default) */
+:root,
+:root[data-theme='light'] {
+  --bg: var(--color-paper);
+  --bg-subtle: #f1f7f2;
+  --surface: #f6faf6;
+  --surface-raised: #e9f1ea;
+  --text: var(--color-ink);
+  --text-muted: #42514e;
+  --border: #d0dcd4;
+  --border-strong: #6f857a;
+  --accent: var(--color-forest);
+  --accent-hover: #1a6527;
+  --accent-contrast: var(--color-paper);
+  --link: #1b6b2b;
+  --mark: var(--color-green);
+  --focus: #1a6527;
+  --code-bg: #0a1717;
+  --code-text: #e6efe9;
+  --shadow: 0 1px 2px rgb(4 15 15 / 8%), 0 6px 18px rgb(4 15 15 / 6%);
+  color-scheme: light;
+}
+
+/* Dark theme: explicit choice, or system preference when no choice was made */
+:root[data-theme='dark'] {
+  --bg: var(--color-ink);
+  --bg-subtle: #081616;
+  --surface: #0d1e1e;
+  --surface-raised: var(--color-slate);
+  --text: var(--color-paper);
+  --text-muted: #a9bcb7;
+  --border: #25332f;
+  --border-strong: #6a8580;
+  --accent: var(--color-green);
+  --accent-hover: #4cc066;
+  --accent-contrast: var(--color-ink);
+  --link: #4cc066;
+  --mark: var(--color-green);
+  --focus: #4cc066;
+  --code-bg: #091616;
+  --code-text: #e6efe9;
+  --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 30%);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: var(--color-ink);
+    --bg-subtle: #081616;
+    --surface: #0d1e1e;
+    --surface-raised: var(--color-slate);
+    --text: var(--color-paper);
+    --text-muted: #a9bcb7;
+    --border: #25332f;
+    --border-strong: #6a8580;
+    --accent: var(--color-green);
+    --accent-hover: #4cc066;
+    --accent-contrast: var(--color-ink);
+    --link: #4cc066;
+    --mark: var(--color-green);
+    --focus: #4cc066;
+    --code-bg: #091616;
+    --code-text: #e6efe9;
+    --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 30%);
+    color-scheme: dark;
+  }
+}

@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/urls';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The page you were looking for does not exist."
+  noindex
+>
+  <section class="section">
+    <div class="container container--narrow">
+      <p class="eyebrow">404</p>
+      <h1>That page doesn't exist</h1>
+      <p class="nf__text">
+        The link may be out of date, or the address may have a typo. These places are a good start:
+      </p>
+      <ul class="btn-row nf__links">
+        <li>
+          <a class="btn btn--primary" href={url('')}>
+            Home
+          </a>
+        </li>
+        <li>
+          <a class="btn btn--ghost" href={url('projects/')}>
+            Projects
+          </a>
+        </li>
+        <li>
+          <a class="btn btn--ghost" href={url('apps/')}>
+            Apps
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  h1 {
+    margin-top: var(--space-3);
+  }
+
+  .nf__text {
+    margin-top: var(--space-4);
+    color: var(--text-muted);
+  }
+
+  .nf__links {
+    margin-top: var(--space-5);
+    list-style: none;
+  }
+</style>

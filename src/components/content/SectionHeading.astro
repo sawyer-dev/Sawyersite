@@ -1,0 +1,38 @@
+---
+interface Props {
+  title: string;
+  id?: string;
+  linkLabel?: string;
+  linkHref?: string;
+  eyebrow?: string;
+}
+
+const { title, id, linkLabel, linkHref, eyebrow } = Astro.props;
+---
+
+<div class="section-heading">
+  <div>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h2 id={id}>{title}</h2>
+  </div>
+  {linkLabel && linkHref && (
+    <a class="link-arrow" href={linkHref}>
+      {linkLabel}
+    </a>
+  )}
+</div>
+
+<style>
+  .section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+
+  .section-heading h2 {
+    margin-top: var(--space-2);
+  }
+</style>

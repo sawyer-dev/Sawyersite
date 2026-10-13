@@ -1,0 +1,28 @@
+---
+title: C-minus Parser
+summary: A parser written in C with Bison and Flex that analyzes a subset of C and translates it into x86 assembly, built for a Programming Languages course.
+year: 2021
+status: complete
+order: 0
+role: Course project
+categories: [Compilers, Systems]
+technologies: [C, Bison, Flex, x86 assembly]
+contentLayout: article
+---
+
+import input from '../../assets/projects/c-minus-parser/input-file.webp';
+import output from '../../assets/projects/c-minus-parser/assembly-output.webp';
+
+## Overview
+
+This parser was developed for my Programming Languages class in the summer 2021 semester. It uses C together with Bison and Flex to lexically analyze and parse a subset of C code, and to produce the corresponding x86 assembly.
+
+## Example
+
+<Gallery
+  label="C-minus Parser input and output"
+  images={[
+    { src: input, alt: 'A source file written in the supported subset of C.', caption: 'An input file.' },
+    { src: output, alt: 'The x86 assembly generated from the input file.', caption: 'The generated assembly output.' },
+  ]}
+/>

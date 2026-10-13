@@ -1,0 +1,57 @@
+---
+import EntryCard from '../../components/content/EntryCard.astro';
+import PageIntro from '../../components/content/PageIntro.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getApps } from '../../lib/collections';
+import { url } from '../../lib/urls';
+
+const apps = await getApps();
+---
+
+<BaseLayout
+  title="Apps"
+  description="Interactive experiments by Sawyer Knowles that run in the browser: small, working tools built from idea to finished interface."
+>
+  <PageIntro
+    eyebrow="Apps"
+    title="Interactive experiments"
+    lead="Small tools that run entirely in your browser. Each one loads only when you open it, and each is labelled honestly as a prototype, experiment, or stable app."
+  />
+
+  <section class="section" aria-label="App list">
+    <div class="container">
+      {apps.length === 0 ? (
+        <EmptyState title="No apps yet" message="Experiments will appear here once published." />
+      ) : (
+        <ul class="grid">
+          {apps.map((a) => (
+            <li>
+              <EntryCard
+                href={url(`apps/${a.id}/`)}
+                title={a.data.title}
+                summary={a.data.summary}
+                status={a.data.status}
+                tags={a.data.categories}
+                image={a.data.thumbnail}
+                imageAlt={a.data.thumbnailAlt}
+                highlight={a.data.interaction}
+                headingLevel="h2"
+                cta="Open app"
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    list-style: none;
+  }
+</style>

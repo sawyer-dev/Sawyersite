@@ -1,0 +1,72 @@
+---
+import PageIntro from '../components/content/PageIntro.astro';
+import TimelineEntry from '../components/content/TimelineEntry.astro';
+import SkillGroups from '../components/content/SkillGroups.astro';
+import SectionHeading from '../components/content/SectionHeading.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { roles, skills } from '../data/profile';
+import { site } from '../data/site';
+import { url } from '../lib/urls';
+---
+
+<BaseLayout
+  title="Experience"
+  description="Professional experience of Sawyer Knowles: full-stack engineering at SS&C Advent, XR prototyping for Meta Reality Labs, and game development instruction."
+>
+  <PageIntro
+    eyebrow="Experience"
+    title="Where I've worked"
+    lead="Full-stack product engineering today, and before that XR and display prototyping for Meta Reality Labs."
+  />
+
+  <section class="section" aria-label="Employment history">
+    <div class="container">
+      {roles.map((role) => (
+        <TimelineEntry role={role} />
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--subtle" aria-labelledby="skills-heading">
+    <div class="container">
+      <SectionHeading title="Technical focus" id="skills-heading" eyebrow="Skills" />
+      <SkillGroups groups={skills} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="more-heading">
+    <div class="container container--narrow">
+      <h2 id="more-heading">Want the details?</h2>
+      <p class="more__text">
+        Selected personal projects are on the projects page. For anything else, email works best.
+      </p>
+      <div class="btn-row more__actions">
+        <a class="btn btn--primary" href={url('projects/')}>
+          See projects
+        </a>
+        <a class="btn btn--ghost" href={`mailto:${site.email}`}>
+          Email me
+        </a>
+        <a
+          class="btn btn--ghost"
+          href={site.links.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          LinkedIn<span class="visually-hidden"> (opens in a new tab)</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .more__text {
+    margin-top: var(--space-3);
+    color: var(--text-muted);
+  }
+
+  .more__actions {
+    margin-top: var(--space-5);
+  }
+</style>

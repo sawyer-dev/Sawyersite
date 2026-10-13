@@ -1,0 +1,69 @@
+---
+import AppHost from './AppHost';
+import type { AppKey } from '../../app-registry';
+
+interface Props {
+  appKey: AppKey;
+  title: string;
+}
+
+const { appKey, title } = Astro.props;
+---
+
+<section class="app-frame" aria-label={`${title} interactive app`}>
+  <AppHost client:only="react" appKey={appKey} title={title}>
+    <div slot="fallback" class="app-state" role="status">
+      <span class="app-state__spinner" aria-hidden="true"></span>
+      <p>Loading {title}…</p>
+    </div>
+  </AppHost>
+  <noscript>
+    <div class="app-state app-state--error">
+      <p class="app-state__title">JavaScript is required</p>
+      <p>This app runs in your browser and needs JavaScript enabled.</p>
+    </div>
+  </noscript>
+</section>
+
+<style is:global>
+  .app-frame {
+    padding: var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    min-height: 12rem;
+  }
+
+  .app-state {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+
+  .app-state--error {
+    border: 1.5px dashed var(--border-strong);
+    border-radius: var(--radius);
+  }
+
+  .app-state__title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 650;
+  }
+
+  .app-state__spinner {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 3px solid var(--border);
+    border-top-color: var(--mark);
+    border-radius: 50%;
+    animation: app-spin 0.9s linear infinite;
+  }
+
+  @keyframes app-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

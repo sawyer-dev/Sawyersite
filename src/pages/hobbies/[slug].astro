@@ -1,0 +1,44 @@
+---
+import { render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { mdxComponents } from '../../components/content/mdx-components';
+import { getHobbies } from '../../lib/collections';
+import { neighbours } from '../../lib/content-utils';
+import { url } from '../../lib/urls';
+
+export async function getStaticPaths() {
+  const hobbies = await getHobbies();
+  return hobbies.map((hobby) => ({
+    params: { slug: hobby.id },
+    props: { hobby, ordered: hobbies },
+  }));
+}
+
+const { hobby, ordered } = Astro.props;
+const { Content, headings } = await render(hobby);
+const { previous, next } = neighbours(ordered, hobby.id);
+const toTarget = (h: typeof previous) =>
+  h ? { title: h.data.title, href: url(`hobbies/${h.id}/`) } : undefined;
+const d = hobby.data;
+---
+
+<ArticleLayout
+  title={d.title}
+  summary={d.summary}
+  layout={d.contentLayout}
+  status={d.status}
+  meta={d.started ? [`Since ${d.started}`] : []}
+  tags={d.categories}
+  headings={headings}
+  crumbs={[
+    { label: 'Home', href: url('') },
+    { label: 'Hobbies', href: url('hobbies/') },
+    { label: d.title },
+  ]}
+  previous={toTarget(previous)}
+  next={toTarget(next)}
+  allHref={url('hobbies/')}
+  allLabel="All hobbies"
+>
+  <Content components={mdxComponents} />
+</ArticleLayout>

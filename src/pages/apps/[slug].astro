@@ -1,0 +1,150 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/navigation/Breadcrumbs.astro';
+import PrevNext from '../../components/navigation/PrevNext.astro';
+import StatusBadge from '../../components/ui/StatusBadge.astro';
+import AppFrame from '../../components/apps/AppFrame.astro';
+import { mdxComponents } from '../../components/content/mdx-components';
+import { getApps } from '../../lib/collections';
+import { neighbours } from '../../lib/content-utils';
+import { url } from '../../lib/urls';
+
+export async function getStaticPaths() {
+  const apps = await getApps();
+  return apps.map((app) => ({
+    params: { slug: app.id },
+    props: { app, ordered: apps },
+  }));
+}
+
+const { app, ordered } = Astro.props;
+const { Content } = await render(app);
+const { previous, next } = neighbours(ordered, app.id);
+const toTarget = (a: typeof previous) =>
+  a ? { title: a.data.title, href: url(`apps/${a.id}/`) } : undefined;
+const d = app.data;
+const updated = d.updated.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+---
+
+<BaseLayout title={d.title} description={d.summary}>
+  <div class="container app-page">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: url('') },
+        { label: 'Apps', href: url('apps/') },
+        { label: d.title },
+      ]}
+    />
+
+    <header class="app-head">
+      <p class="app-head__meta">
+        <StatusBadge status={d.status} />
+        <span>Updated {updated}</span>
+      </p>
+      <h1>{d.title}</h1>
+      <p class="app-head__summary">{d.summary}</p>
+      {d.sourceUrl && (
+        <p>
+          <a class="btn btn--ghost" href={d.sourceUrl} target="_blank" rel="noopener noreferrer">
+            Source code<span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        </p>
+      )}
+    </header>
+
+    <AppFrame appKey={d.entryComponent} title={d.title} />
+
+    <div class="app-notes">
+      <div class="prose">
+        <Content components={mdxComponents} />
+      </div>
+      {d.limitations.length > 0 && (
+        <aside class="app-limits" aria-labelledby="limits-heading">
+          <h2 id="limits-heading">Known limitations</h2>
+          <ul>
+            {d.limitations.map((l) => (
+              <li>{l}</li>
+            ))}
+          </ul>
+        </aside>
+      )}
+    </div>
+
+    <PrevNext
+      previous={toTarget(previous)}
+      next={toTarget(next)}
+      allHref={url('apps/')}
+      allLabel="All apps"
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .app-page {
+    padding-block: var(--space-4) var(--space-8);
+  }
+
+  .app-head {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 52rem;
+    padding-block: var(--space-5) var(--space-6);
+  }
+
+  .app-head__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .app-head h1 {
+    font-size: var(--text-3xl);
+  }
+
+  .app-head__summary {
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+  }
+
+  .app-notes {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-7);
+  }
+
+  .app-limits {
+    max-width: var(--measure);
+    padding: var(--space-4) var(--space-5);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+  }
+
+  .app-limits h2 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2);
+  }
+
+  .app-limits ul {
+    padding-left: 1.25rem;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 64rem) {
+    .app-notes {
+      grid-template-columns: minmax(0, 1fr) 22rem;
+      align-items: start;
+    }
+  }
+</style>

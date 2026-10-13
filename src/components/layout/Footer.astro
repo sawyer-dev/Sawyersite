@@ -1,0 +1,153 @@
+---
+import { nav, site } from '../../data/site';
+import { url } from '../../lib/urls';
+
+const year = new Date().getFullYear();
+const external = [
+  { label: 'Email', href: `mailto:${site.email}`, external: false },
+  { label: 'LinkedIn', href: site.links.linkedin, external: true },
+  ...(site.links.github ? [{ label: 'GitHub', href: site.links.github, external: true }] : []),
+  ...(site.links.resume
+    ? [{ label: 'Résumé', href: url(site.links.resume), external: false }]
+    : []),
+];
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__about">
+      <p class="site-footer__name">{site.name}</p>
+      <p class="site-footer__blurb">
+        Full-stack engineer who likes taking an idea all the way to a working product.
+      </p>
+    </div>
+
+    <nav aria-label="Footer" class="site-footer__nav">
+      <h2 class="site-footer__heading">Explore</h2>
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a href={url(item.href)}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="site-footer__nav">
+      <h2 class="site-footer__heading">Connect</h2>
+      <ul>
+        {external.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              {item.label}
+              {item.external && <span class="visually-hidden"> (opens in a new tab)</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p>
+      © {year} {site.name}
+    </p>
+    <p>
+      <a href={site.links.source} target="_blank" rel="noopener noreferrer">
+        Site source<span class="visually-hidden"> (opens in a new tab)</span>
+      </a>
+      <span aria-hidden="true"> · </span>
+      <a href="#top">Back to top</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    /* The footer stays dark in both themes for a strong, high-contrast close. */
+    --f-text: var(--color-paper);
+    --f-muted: #a9bcb7;
+    --f-link: #4cc066;
+    margin-top: var(--section-gap);
+    padding-block: var(--space-7) var(--space-5);
+    background: var(--color-ink);
+    color: var(--f-text);
+    border-top: 3px solid var(--color-green);
+  }
+
+  .site-footer a {
+    color: var(--f-text);
+    text-decoration-color: var(--color-green);
+  }
+
+  .site-footer a:hover {
+    color: var(--f-link);
+  }
+
+  .site-footer :focus-visible {
+    outline-color: var(--f-link);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+
+  .site-footer__about {
+    max-width: 28rem;
+  }
+
+  .site-footer__name {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+  }
+
+  .site-footer__blurb {
+    margin-top: var(--space-2);
+    color: var(--f-muted);
+  }
+
+  .site-footer__heading {
+    margin-bottom: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--f-muted);
+  }
+
+  .site-footer__nav ul {
+    list-style: none;
+    display: grid;
+    gap: 0;
+  }
+
+  .site-footer__nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    text-decoration: none;
+  }
+
+  .site-footer__nav a:hover {
+    text-decoration: underline;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-7);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-slate);
+    font-size: var(--text-sm);
+    color: var(--f-muted);
+  }
+</style>

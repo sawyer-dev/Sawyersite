@@ -1,0 +1,119 @@
+---
+interface Target {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  /** Entry listed just before this one in the index (newer for projects). */
+  previous?: Target | undefined;
+  /** Entry listed just after this one in the index (older for projects). */
+  next?: Target | undefined;
+  previousLabel?: string;
+  nextLabel?: string;
+  allHref: string;
+  allLabel: string;
+}
+
+const {
+  previous,
+  next,
+  previousLabel = 'Previous',
+  nextLabel = 'Next',
+  allHref,
+  allLabel,
+} = Astro.props;
+---
+
+<nav class="prevnext" aria-label="More entries">
+  <div class="prevnext__side">
+    {previous && (
+      <a class="prevnext__link" href={previous.href} rel="prev">
+        <span class="prevnext__dir">← {previousLabel}</span>
+        <span class="prevnext__title">{previous.title}</span>
+      </a>
+    )}
+  </div>
+  <a class="prevnext__all" href={allHref}>
+    {allLabel}
+  </a>
+  <div class="prevnext__side prevnext__side--end">
+    {next && (
+      <a class="prevnext__link" href={next.href} rel="next">
+        <span class="prevnext__dir">{nextLabel} →</span>
+        <span class="prevnext__title">{next.title}</span>
+      </a>
+    )}
+  </div>
+</nav>
+
+<style>
+  .prevnext {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border);
+  }
+
+  .prevnext__side:empty {
+    display: none;
+  }
+
+  .prevnext__link {
+    display: block;
+    height: 100%;
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color var(--duration) var(--ease);
+  }
+
+  .prevnext__link:hover {
+    border-color: var(--accent);
+  }
+
+  .prevnext__dir {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .prevnext__title {
+    display: block;
+    margin-top: var(--space-1);
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+
+  .prevnext__all {
+    justify-self: center;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 600;
+  }
+
+  @media (min-width: 48rem) {
+    .prevnext {
+      grid-template-columns: 1fr auto 1fr;
+      align-items: stretch;
+    }
+
+    .prevnext__side--end {
+      text-align: right;
+    }
+
+    .prevnext__all {
+      align-self: center;
+      padding-inline: var(--space-4);
+    }
+  }
+</style>

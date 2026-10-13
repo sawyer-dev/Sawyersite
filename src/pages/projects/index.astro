@@ -1,0 +1,61 @@
+---
+import EntryCard from '../../components/content/EntryCard.astro';
+import PageIntro from '../../components/content/PageIntro.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjects } from '../../lib/collections';
+import { formatYearSpan } from '../../lib/content-utils';
+import { url } from '../../lib/urls';
+
+const projects = await getProjects();
+---
+
+<BaseLayout
+  title="Projects"
+  description="Personal and team software projects by Sawyer Knowles, newest first: web applications, games, and tools."
+>
+  <PageIntro
+    eyebrow="Projects"
+    title="Things I've built"
+    lead="Newest first, ordered by the year each project was completed or last meaningfully updated."
+  />
+
+  <section class="section" aria-label="Project list">
+    <div class="container">
+      {projects.length === 0 ? (
+        <EmptyState
+          title="No projects yet"
+          message="Projects will appear here once they are added."
+        />
+      ) : (
+        <ul class="grid">
+          {projects.map((p) => (
+            <li>
+              <EntryCard
+                href={url(`projects/${p.id}/`)}
+                title={p.data.title}
+                summary={p.data.summary}
+                status={p.data.status}
+                meta={[formatYearSpan(p.data.startYear, p.data.year)]}
+                tags={p.data.technologies}
+                image={p.data.thumbnail}
+                imageAlt={p.data.thumbnailAlt}
+                headingLevel="h2"
+                cta="Read the write-up"
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    list-style: none;
+  }
+</style>

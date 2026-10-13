@@ -1,0 +1,47 @@
+---
+import { render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { mdxComponents } from '../../components/content/mdx-components';
+import { getProjects } from '../../lib/collections';
+import { formatYearSpan, neighbours } from '../../lib/content-utils';
+import { url } from '../../lib/urls';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project, ordered: projects },
+  }));
+}
+
+const { project, ordered } = Astro.props;
+const { Content, headings } = await render(project);
+const { previous, next } = neighbours(ordered, project.id);
+const toTarget = (p: typeof previous) =>
+  p ? { title: p.data.title, href: url(`projects/${p.id}/`) } : undefined;
+const d = project.data;
+---
+
+<ArticleLayout
+  title={d.title}
+  summary={d.summary}
+  layout={d.contentLayout}
+  status={d.status}
+  meta={[formatYearSpan(d.startYear, d.year), ...(d.role ? [d.role] : [])]}
+  tags={d.technologies}
+  links={d.links}
+  headings={headings}
+  crumbs={[
+    { label: 'Home', href: url('') },
+    { label: 'Projects', href: url('projects/') },
+    { label: d.title },
+  ]}
+  previous={toTarget(previous)}
+  next={toTarget(next)}
+  previousLabel="Newer"
+  nextLabel="Older"
+  allHref={url('projects/')}
+  allLabel="All projects"
+>
+  <Content components={mdxComponents} />
+</ArticleLayout>
