@@ -8,7 +8,7 @@ featured: true
 order: 0
 role: Design and development
 categories: [Web]
-technologies: [Angular, TypeScript, Google Apps Script, Google Sheets]
+technologies: [Angular, TypeScript, HTML, CSS, Google Apps Script, Google Sheets]
 contentLayout: article
 ---
 
