@@ -11,6 +11,7 @@ export interface AppModule {
  */
 export const appRegistry = {
   'rule-explorer': () => import('./rule-explorer/RuleExplorer'),
+  'bulletin-board': () => import('./bulletin-board/BulletinBoard'),
 } satisfies Record<string, () => Promise<AppModule>>;
 
 export type AppKey = keyof typeof appRegistry;

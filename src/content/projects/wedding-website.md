@@ -9,6 +9,9 @@ order: 0
 role: Design and development
 categories: [Web]
 technologies: [Angular, TypeScript, HTML, CSS, Google Apps Script, Google Sheets]
+links:
+  - label: Source on GitHub
+    url: https://github.com/sawyer-dev/Weddingsite
 contentLayout: article
 ---
 

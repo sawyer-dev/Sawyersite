@@ -1,6 +1,6 @@
 ---
 title: Swimming
-summary: One or two sentences describing the hobby, written for someone who has never heard of it.
+summary: Exercise and competition.
 status: historical
 started: 2013
 order: 0

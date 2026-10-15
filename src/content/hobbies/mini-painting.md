@@ -1,20 +1,12 @@
 ---
 title: Mini Printing & Painting
-summary: One or two sentences describing the hobby, written for someone who has never heard of it.
+summary: 3D Printing and painting miniature figures for table-top games.
 status: current
 started: 2023
 order: 0
 categories: [Example]
 contentLayout: article
 ---
-
-<!--
-  Template, not published: files starting with "_" are ignored by the content loader.
-  Copy this file to src/content/hobbies/<slug>.md (or .mdx), rename it, and edit.
-  Delete this comment and any section that does not apply: hobby pages do not need a
-  problem/solution structure. In .mdx files <Callout>, <MediaFrame>, <Gallery> and <VideoFrame>
-  are available without imports.
--->
 
 ## What it is
 

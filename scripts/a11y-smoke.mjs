@@ -100,7 +100,7 @@ for (const theme of ['light', 'dark']) {
     await page.goto(origin + route, { waitUntil: 'networkidle' });
     if (route.includes('/apps/') && route.split('/').filter(Boolean).length > 2) {
       await page
-        .waitForSelector('.rule-explorer', { timeout: 10_000 })
+        .waitForSelector('.rule-explorer, .bulletin-board', { timeout: 10_000 })
         .catch(() => runtime.push('app did not render'));
     }
     const label = `[${theme}] ${route}`;

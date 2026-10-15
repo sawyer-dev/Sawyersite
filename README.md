@@ -145,6 +145,23 @@ The Apps index, Home preview, and detail page are generated from that file. Beha
 
 Each app should provide its own reset, help text, and error states, work by keyboard and touch, and avoid persistence unless it documents what is stored. [Rule Explorer](src/app-registry/rule-explorer/RuleExplorer.tsx) is the reference implementation.
 
+### Bulletin Board backend
+
+The Bulletin Board's React app and its paste-ready Apps Script are kept together in [src/app-registry/bulletin-board](src/app-registry/bulletin-board). The script uses an Apps Script HTML-service iframe bridge and `google.script.run`; it does not use cross-origin `fetch` or expose the Sheet ID in the site bundle.
+
+1. Create a private Google Sheet. Open **Extensions → Apps Script** from that Sheet.
+2. Replace the starter contents of `Code.gs` with [src/app-registry/bulletin-board/Code.gs](src/app-registry/bulletin-board/Code.gs), then save. If you pasted an earlier version, replace it with the latest file before testing.
+3. Run `setupBulletinBoard` once from the Apps Script editor (or reload the Sheet and choose **Bulletin Board → Initialize or verify setup**). Review and approve the requested Google Sheets and email permissions. This creates the `Bulletin Notes` tab, stores the spreadsheet ID in Script Properties, sets the moderation recipient to `sawyer.k.dev@gmail.com`, and installs the default allowed origins for GitHub Pages and local development.
+4. To test before public deployment, choose **Deploy → Test deployments → Web app** and copy its `/dev` URL. `/dev` runs the latest saved code and is restricted to script editors, so stay signed in to the Google account that owns/edits the script. The app accepts `/dev` only from local Astro development; it cannot be used by a production site.
+5. For local development, copy `.env.example` to `.env`, set `PUBLIC_BULLETIN_SCRIPT_URL` to the `/dev` URL, and restart `npm run dev`. The default origin allowlist includes `http://localhost:4321` and `http://127.0.0.1:4321`. Run `setupBulletinBoard` first so the test app can access the Sheet and send email. Moderation links generated during test mode point to the `/dev` URL and are only usable by script editors.
+6. When ready for visitors, create a **Web app** deployment that executes as your account and allows access to **Anyone**. Set the repository Actions **variable** `PUBLIC_BULLETIN_SCRIPT_URL` to that deployment's `/exec` URL and rerun the Pages deployment workflow. Keep `/dev` URLs out of repository variables.
+
+After changing `Code.gs`, save it and publish the change: **Deploy → Manage deployments → Edit → Version → New version → Deploy**. The `/exec` URL normally remains the same; update `.env` or the Actions variable if the deployment URL changes.
+
+The app’s hidden iframe is served by this web app. The bridge checks the parent site origin against the comma-separated `BULLETIN_ALLOWED_ORIGINS` Script Property. The setup function installs `https://sawyer-dev.github.io`, `http://localhost:4321`, and `http://127.0.0.1:4321` by default; add the origin if the site moves to a custom domain. Apps Script's `google.script.run` channel carries board reads and submissions. Email review links open a confirmation page; merely opening or previewing the link does not change a note. Approving makes it public; rejecting deletes its row. Remove an approved note by deleting its row from the private `Bulletin Notes` tab.
+
+The Sheet must remain private. The public deployment exposes only approved notes and a validated submission operation. Apps Script applies a daily submission cap and its email quota; the visitor name and note text are plain text and never interpreted as HTML. Do not put spreadsheet IDs, moderation tokens, or credentials into `.env`, the React app, or GitHub Pages variables.
+
 ## Outstanding content
 
 Nothing below is invented. The site hides or omits each item until you supply it.
@@ -174,4 +191,5 @@ Nothing below is invented. The site hides or omits each item until you supply it
 - **Build fails on a content file:** the error names the file and field. Common causes are `thumbnail` without `thumbnailAlt`, a `summary` outside 20 to 240 characters, or an unknown `entryComponent`.
 - **MDX build error about an unresolved import named `article`:** use `contentLayout`, not `layout`.
 - **A new app does not show up:** it needs both a registry entry and a content file, and its `entryComponent` must match the registry key exactly.
+- **Bulletin Board says the Apps Script bridge did not load with a `/dev` URL:** `/dev` only works for Google accounts with edit access to the script. Sign into that account in the same browser profile, check the `BULLETIN_ALLOWED_ORIGINS` Script Property contains the exact local origin, and open the `/dev` URL directly once to complete any Google access/authorization prompt. Do not use `/dev` in production; use an `/exec` deployment when ready to make the endpoint public.
 - **`npm run test:a11y` cannot find a browser:** run `npx playwright install chromium`.

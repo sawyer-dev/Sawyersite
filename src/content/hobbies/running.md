@@ -1,6 +1,6 @@
 ---
 title: Running
-summary: One or two sentences describing the hobby, written for someone who has never heard of it.
+summary: Exercise and training to beat my personal records.
 status: current
 started: 2024
 order: 0

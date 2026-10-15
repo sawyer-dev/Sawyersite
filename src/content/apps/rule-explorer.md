@@ -6,7 +6,7 @@ interaction: Edit the rule table or type a rule number, then replay the pattern.
 entryComponent: rule-explorer
 categories: [Generative, Algorithms]
 updated: 2026-10-12
-featured: true
+featured: false
 sourceUrl: https://github.com/sawyer-dev/Sawyersite/tree/main/src/app-registry/rule-explorer
 limitations:
   - The grid is a fixed 81 cells wide and 48 generations tall, and the edges wrap around.
